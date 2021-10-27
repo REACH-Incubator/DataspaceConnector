@@ -21,8 +21,10 @@ import io.dataspaceconnector.controller.util.ResponseDescription;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,6 +39,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/api/configmanager")
 @Tag(name = "ConfigManager: GUI Utilities")
+@Log4j2
 public class GuiController {
 
     /**
@@ -48,15 +51,17 @@ public class GuiController {
      */
     @Hidden
     @GetMapping(value = "/enum/{enumName}")
-    @Operation(summary = "Get the specific enum")
-    @ApiResponse(responseCode = ResponseCode.OK, description = ResponseDescription.OK)
-    @ApiResponse(responseCode = ResponseCode.BAD_REQUEST, description
-            = ResponseDescription.BAD_REQUEST)
-    @ApiResponse(responseCode = ResponseCode.UNAUTHORIZED, description
-            = ResponseDescription.UNAUTHORIZED)
+    @Operation(summary = "Get a list of enums by value name.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = ResponseCode.OK, description = ResponseDescription.OK),
+            @ApiResponse(responseCode = ResponseCode.BAD_REQUEST,
+                    description = ResponseDescription.BAD_REQUEST),
+            @ApiResponse(responseCode = ResponseCode.UNAUTHORIZED,
+                    description = ResponseDescription.UNAUTHORIZED)})
     ResponseEntity<String> getSpecificEnum(final @PathVariable String enumName) {
         final var enums = GuiUtils.getSpecificEnum(enumName);
-        return enums == null ? ResponseEntity.badRequest().body("Could not get the enums")
+        return enums == null ? ResponseEntity.badRequest().body("Could not get the enums.")
                 : ResponseEntity.ok(enums);
     }
+
 }
