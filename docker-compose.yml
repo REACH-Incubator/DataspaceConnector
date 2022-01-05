@@ -30,8 +30,9 @@ services:
       - connector-data:/var/lib/postgresql/data
 
   connector:
-    build:
-      context: .
+    # build:
+    #   context: .
+    image: ghcr.io/international-data-spaces-association/dataspace-connector:latest
     container_name: 'connector-container'
     ports:
       - 8080:8080
@@ -44,6 +45,8 @@ services:
 
 networks:
   connector:
+    external: True
+    name: idsa
 
 volumes:
   connector-data: {}
